@@ -1,5 +1,5 @@
 #include "common.hpp"
-#include "logging_service.hpp"
+#include "../include/logging_service.hpp"
 
 void put_msg(size_t uuid, const std::string &msg) {
     msg_pool[uuid] = msg;

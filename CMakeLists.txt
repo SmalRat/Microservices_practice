@@ -16,17 +16,17 @@ endif ()
 # Project files, packages, libraries and so on
 ##########################################################
 
-add_executable(facade-service src/facade_service.cpp)
+add_executable(facade-service facade_service/src/facade_service.cpp)
 target_include_directories(facade-service PRIVATE include)
 
-add_executable(logging-service src/logging_service.cpp)
+add_executable(logging-service logging_service/src/logging_service.cpp)
 target_include_directories(logging-service PRIVATE include)
 
-add_executable(messages-service src/messages_service.cpp)
+add_executable(messages-service messages_service/src/messages_service.cpp)
 target_include_directories(messages-service PRIVATE include)
 
-add_executable(get-example src/send_get_request.cpp)
-add_executable(post-example src/send_post_request.cpp)
+add_executable(get-example test_programs/send_get_request.cpp)
+add_executable(post-example test_programs/send_post_request.cpp)
 target_include_directories(get-example PRIVATE include)
 target_include_directories(post-example PRIVATE include)
 
