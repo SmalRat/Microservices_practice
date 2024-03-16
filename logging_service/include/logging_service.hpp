@@ -7,10 +7,10 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-static std::map<size_t, std::string> msg_pool = {};
+static std::map<boost::uuids::uuid, std::string> msg_pool = {};
 constexpr size_t RESERVED_LETTERS = 3;
 
-void put_msg(size_t uuid, std::string &&msg);
+void put_msg(boost::uuids::uuid uuid, const std::string &msg);
 std::string get_all_messages();
 
 void handle_request(const httplib::Request& req, httplib::Response& res);

@@ -1,7 +1,8 @@
 #include "common.hpp"
 #include "../include/logging_service.hpp"
 
-void put_msg(size_t uuid, const std::string &msg) {
+
+void put_msg(boost::uuids::uuid uuid, const std::string &msg) {
     msg_pool[uuid] = msg;
     std::cout << msg_pool[uuid] << std::endl;
 }
@@ -31,22 +32,29 @@ void handle_post_request(const httplib::Request& req, httplib::Response& res) {
 #ifdef LOGGING_SERVICE_LOGS_ENABLED
     std::cout << "Got POST request!" << std::endl;
 #endif
-    std::string msg;
-    int uuid;
+    const auto &json_str = req.body;
+    Json::CharReaderBuilder builder;
+    Json::CharReader *reader = builder.newCharReader();
+    Json::Value json_data;
+    std::string errors;
 
-    try {
-        boost::property_tree::ptree pt;
-        std::istringstream jsonStream(req.body);
-        read_json(jsonStream, pt);
+    bool parsingSuccessful = reader->parse(json_str.c_str(), json_str.c_str() + json_str.length(), &json_data, &errors);
+    delete reader;
 
-        msg = pt.get<std::string>("msg");
-        uuid = pt.get<int>("uuid");
-
-        std::cout << "Message: " << msg << std::endl;
-        std::cout << "UUID: " << uuid << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+    if (!parsingSuccessful) {
+        std::stringstream error_msg;
+        error_msg << "Error parsing JSON: " << errors << std::endl;
+        throw std::runtime_error(error_msg.str());
     }
+
+    std::string uuidStr = json_data["uuid"].asString();
+    std::string msg = json_data["msg"].asString();
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid uuid = gen(uuidStr);
+    std::vector<unsigned char> uuidBytes(uuid.begin(), uuid.end());
+
+    std::cout << "UUID: " << uuidStr << std::endl;
+    std::cout << "Message: " << msg << std::endl;
 
     put_msg(uuid, msg);
 }

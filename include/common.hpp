@@ -3,16 +3,21 @@
 
 #include <string>
 #include <httplib.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/algorithm/hex.hpp>
+#include "json/json.h"
 
-const std::string FACADE_PATH = "http://localhost:8080";
-const std::string LOGGING_PATH = "http://localhost:8081";
-const std::string MESSAGES_PATH = "http://localhost:8082";
+const inline std::string FACADE_PATH = "http://localhost:8080";
+const inline std::string LOGGING_PATH = "http://localhost:8081";
+const inline std::string MESSAGES_PATH = "http://localhost:8082";
 
 inline constexpr int NOT_FOUND_STATUS = 404;
 inline constexpr int ALL_OK_STATUS = 200;
 
-const std::string POST_FAIL_RESPONSE = "Failed to send POST request";
-const std::string GET_FAIL_RESPONSE = "Failed to send GET request";
+const inline std::string POST_FAIL_RESPONSE = "Failed to send POST request";
+const inline std::string GET_FAIL_RESPONSE = "Failed to send GET request";
 
 
 void send_post_request(const std::string &url, const std::string &path, const std::string &data, std::string &response) {

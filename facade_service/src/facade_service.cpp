@@ -1,10 +1,6 @@
 #include "common.hpp"
 #include "../include/facade_service.hpp"
 
-size_t gen_uuid(){
-    return LAST_UUID++;
-}
-
 std::string concat_responses(const std::string &log_service_response, const std::string &message_service_response){
     std::string concat{};
     concat.reserve(RESERVED_LETTERS + log_service_response.size() + message_service_response.size() + 1);
@@ -33,10 +29,11 @@ void handle_post_request(const httplib::Request& req, httplib::Response& res) {
     std::cout << "Got POST request!" << std::endl;
 #endif
     std::string msg = req.body;
-    size_t uuid = gen_uuid();
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+    std::string uuidStr = boost::uuids::to_string(uuid);
 
     Json::Value json_data;
-    json_data["uuid"] = uuid;
+    json_data["uuid"] = uuidStr;
     json_data["msg"] = msg;
 
     std::string json_str = Json::writeString(Json::StreamWriterBuilder(), json_data);
