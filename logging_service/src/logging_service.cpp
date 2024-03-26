@@ -4,7 +4,6 @@
 
 void put_msg(boost::uuids::uuid uuid, const std::string &msg) {
     msg_pool[uuid] = msg;
-    std::cout << msg_pool[uuid] << std::endl;
 }
 
 std::string get_all_messages() {
@@ -15,7 +14,6 @@ std::string get_all_messages() {
     }
     concat.reserve(total_size);
     for (const auto &p: msg_pool){
-        std::cout << p.first << std::endl;
         concat += p.second + "\n";
     }
     return concat;
@@ -32,6 +30,7 @@ void handle_post_request(const httplib::Request& req, httplib::Response& res) {
 #ifdef LOGGING_SERVICE_LOGS_ENABLED
     std::cout << "Got POST request!" << std::endl;
 #endif
+
     const auto &json_str = req.body;
     Json::CharReaderBuilder builder;
     Json::CharReader *reader = builder.newCharReader();
@@ -51,12 +50,14 @@ void handle_post_request(const httplib::Request& req, httplib::Response& res) {
     std::string msg = json_data["msg"].asString();
     boost::uuids::string_generator gen;
     boost::uuids::uuid uuid = gen(uuidStr);
-    std::vector<unsigned char> uuidBytes(uuid.begin(), uuid.end());
 
+    std::cout << "JSON content: " << std::endl << std::endl;
     std::cout << "UUID: " << uuidStr << std::endl;
     std::cout << "Message: " << msg << std::endl;
 
     put_msg(uuid, msg);
+
+    res.set_content("Message logged!", "text/plain");
 }
 
 

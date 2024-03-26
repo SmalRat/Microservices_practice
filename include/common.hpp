@@ -26,16 +26,19 @@ void send_post_request(const std::string &url, const std::string &path, const st
 
     if (res && res->status == ALL_OK_STATUS) {
         response = res->body;
-    } else {
+    } else if (res){
+        response = res->body;
+    }
+    else {
         response = POST_FAIL_RESPONSE;
     }
 }
 
 void send_get_request(const std::string &url, const std::string &path, std::string &response) {
     httplib::Client client(url);
-//    std::cout << url;
+
     auto res = client.Get(path);
-    //std::cout << "Messages service response code: " << res << std::endl;
+
     if (res && res->status == ALL_OK_STATUS) {
         response = res->body;
     } else {

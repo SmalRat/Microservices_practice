@@ -39,8 +39,18 @@ void handle_post_request(const httplib::Request& req, httplib::Response& res) {
     std::string json_str = Json::writeString(Json::StreamWriterBuilder(), json_data);
 
     std::string response;
+
+#ifdef FACADE_SERVICE_LOGS_ENABLED
+    std::cout << "Sending json to the logging service: " << std::endl;
     std::cout << json_str << std::endl;
+#endif
+
     send_post_request(LOGGING_PATH, "/logging_service", json_str, response);
+
+#ifdef FACADE_SERVICE_LOGS_ENABLED
+    std::cout << "Got response from the logging service: " << std::endl;
+    std::cout << response << std::endl;
+#endif
 
     res.set_content("Received msg: " + req.body, "text/plain");
 }
