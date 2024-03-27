@@ -77,6 +77,8 @@ int main() {
     server.Get("/logging_service", handle_request);
     server.Post("/logging_service", handle_request);
 
+    std::cout << "Starting logging service!" << std::endl;
+
     server.listen("localhost", 8081);
 
     return 0;

@@ -34,6 +34,8 @@ int main() {
     server.Get("/messages_service", handle_request);
     server.Post("/messages_service", handle_request);
 
+    std::cout << "Starting messages service!" << std::endl;
+
     server.listen("localhost", 8082);
 
     return 0;

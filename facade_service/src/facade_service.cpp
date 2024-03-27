@@ -71,6 +71,8 @@ int main() {
     server.Get("/facade_service", handle_request);
     server.Post("/facade_service", handle_request);
 
+    std::cout << "Starting facade service!" << std::endl;
+
     server.listen("localhost", 8080);
 
     return 0;
